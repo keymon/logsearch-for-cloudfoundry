@@ -40,6 +40,10 @@ cf target -o "system" -s "elk-for-pcf"
 cf create-security-group allow_access_to_elasticsearch /var/vcap/jobs/push-kibana/config/allow_access_to_elasticsearch.rules.json 
 cf bind-security-group allow_access_to_elasticsearch system elk-for-pcf
 
+# Ensure apps in elk-for-pcf have firewall access to CF API and UAA
+cf create-security-group allow_access_to_cf /var/vcap/jobs/push-kibana/config/allow_access_to_cf.rules.json 
+cf bind-security-group allow_access_to_cf system elk-for-pcf
+
 # Create UAA client: <%= p('push-kibana.oauth2_client_id')%> if not already exists
 ACCESS_TOKEN=$(\
 curl -s -D - -k \
