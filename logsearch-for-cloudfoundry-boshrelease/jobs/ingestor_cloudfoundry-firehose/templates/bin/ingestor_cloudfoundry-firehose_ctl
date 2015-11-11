@@ -17,7 +17,7 @@ export LOGSTASH_WORKERS=`grep -c ^processor /proc/cpuinfo`
 case $1 in
 
   start_syslog)
-    echo "Starting Logstash syslog ingestor on 127.0.0.1:514..."
+    echo "Starting Logstash syslog ingestor on 127.0.0.1:5514..."
 
     pid_guard $PIDFILE_syslog $JOB_NAME_syslog
 
@@ -48,18 +48,18 @@ case $1 in
        sysctl -p
     fi
 
-    echo "Waiting 1m for syslog ingestor on: 127.0.0.1:514 to accept connections..."
+    echo "Waiting 1m for syslog ingestor on: 127.0.0.1:5514 to accept connections..."
     n=0
     until [ $n -ge 12 ]
     do
-      nc -4 -z -v 127.0.0.1 514 2>&1 && break
+      nc -4 -z -v 127.0.0.1 5514 2>&1 && break
       n=$[$n+1]
-      echo "Waiting for 127.0.0.1:514 to accept connections ($n of 12)..."
+      echo "Waiting for 127.0.0.1:5514 to accept connections ($n of 12)..."
       sleep 5
     done
 
     if [ "$n" -ge "12" ]; then
-       echo "ERROR:  Cannot connect to syslog ingestor on: 127.0.0.1:514  Exiting..."
+       echo "ERROR:  Cannot connect to syslog ingestor on: 127.0.0.1:5514  Exiting..."
        exit 1
     fi
 
@@ -74,7 +74,7 @@ case $1 in
         <% if p("cloudfoundry.skip_ssl_validation") %>--skip-ssl-validation <% end %> \
         --user=<%= p("cloudfoundry.firehose_user") %> \
         --password=<%= p("cloudfoundry.firehose_password") %> \
-        --syslog-server=127.0.0.1:514 \
+        --syslog-server=127.0.0.1:5514 \
         --events=<%= p("cloudfoundry.firehose_events") %> \
         --boltdb-path=$TMP_DIR/firehose-to-syslog.cache.db \
         --cc-pull-time=60s \<% if p("ingestor_cloudfoundry-firehose.debug") %>
