@@ -3,12 +3,12 @@ input {
 	tcp {
 		add_field => [ "type", "syslog" ]
 		host => "127.0.0.1"
-		port => "514"
+		port => "5514"
 	}
 
 	# Receive logs from CF collector
 	gelf {
-                host => "127.0.0.1" 
+                host => "127.0.0.1"
 		port => 12201
 	}
 }
@@ -58,7 +58,7 @@ output {
                   "batch" => true,
                   "batch_events" => 50
                 } %>
-              <% end %> 
+              <% end %>
 	      <% output['options'].each do | k, v | %>
 	        <%= k %> => <%= v.inspect %>
 	      <% end %>
